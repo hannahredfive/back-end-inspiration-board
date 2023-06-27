@@ -5,6 +5,7 @@ class Board(db.Model):
     title= db.Column(db.String)
     owner= db.Column(db.String)
 
+    cards = db.relationship("Card", back_populates="board")
 
     def to_dict(self):
         board_as_dict = {}

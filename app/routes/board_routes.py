@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, make_response, abort
 from app import db
 from app.models.board import Board
+from app.models.card import Card
 import os
 import requests
 
@@ -85,3 +86,18 @@ def delete_board(board_id):
     db.session.commit()
 
     return abort(make_response({"details":f"Board {board_id} \"{board.title}\" successfully deleted"}, 200))
+
+
+@boards_bp.route("/<board_id>/cards", methods=["POST"])
+def post_cards_under_board(board_id):
+    board = validate_model(Board, board_id)
+    request_body = request.get_json()
+    card_details = request_body["message"]
+
+    card = Card(board_id=board.board_id, likes_count=0, message=card_details)
+
+    db.session.add(card)
+    db.session.commit()
+
+    return make_response({"board_id": board.board_id, "cards": card.to_dict()}, 201)
+
