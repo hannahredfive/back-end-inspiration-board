@@ -65,3 +65,13 @@ def create_board():
     db.session.commit()
 
     return make_response({"boards": new_board.to_dict()}, 201)
+
+
+@boards_bp.route("", methods=["DELETE"])
+def delete_all_boards():
+    boards = Board.query.all()
+    for board in boards:
+        db.session.delete(board)
+    db.session.commit()
+
+    return make_response({"details": f"Boards successfully deleted"}, 200)
