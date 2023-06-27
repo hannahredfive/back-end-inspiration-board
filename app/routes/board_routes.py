@@ -40,18 +40,19 @@ def read_one_board(board_id):
 
     return make_response({"boards": board.to_dict()})
 
-    def post_to_slack(message):
-        url = 'https://slack.com/api/chat.postMessage'
-        payload = {
-                'token': os.environ.get("SLACK_API_TOKEN"),
-                'channel': '#inspogroup-fluffybutt',
-                'text': message
-            }
-        response = requests.post(url, data=payload)
-        return_response = response.status_code
-        db.session.commit()
+def post_to_slack(message):
+    url = 'https://slack.com/api/chat.postMessage'
+    payload = {
+            'token': os.environ.get("SLACK_API_TOKEN"),
+            'channel': '#inspogroup-fluffybutt',
+            'text': message
+        }
+    header_key = os.environ.get("authorization")
 
-    return jsonify({"board": board.to_dict()}), 200
+    response = requests.post(url=url, json=payload,
+    headers={"Authorization": header_key})
+
+    return response
 
 @boards_bp.route("", methods=["POST"])
 def create_board():
