@@ -102,3 +102,11 @@ def post_cards_under_board(board_id):
 
     return make_response({"board_id": board.board_id, "cards": card.to_dict()}, 201)
 
+
+@boards_bp.route("/<board_id>/cards", methods=["GET"])
+def get_card_under_board(board_id):
+    board = validate_model(Board, board_id)
+    cards = Card.query.filter_by(board_id=board.board_id).all()
+    card_list = [card.to_dict() for card in cards]
+
+    return make_response({"board_id": board.board_id, "cards": card_list}, 200)
