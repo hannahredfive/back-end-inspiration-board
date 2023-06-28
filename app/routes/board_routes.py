@@ -125,3 +125,21 @@ def delete_all_cards_from_board(board_id):
         db.session.commit()
 
         return make_response(f"All cards from board {board_id} have been deleted", 200)
+    
+
+@boards_bp.route("/<board_id>/cards/<card_id>", methods=["DELETE"])
+def delete_card(board_id, card_id):
+    board = validate_model(Board, board_id)
+
+    if board is None:
+        return make_response(jsonify({"error": "Board not found"}), 404)
+    
+    card = validate_model(Card, card_id)
+
+    if card not in board.cards:
+        return make_response(jsonify({"error": "Card not found in this board"}), 404)
+    
+    db.session.delete(card)
+    db.session.commit()
+
+    return make_response(jsonify({"details": f"Card {card_id} \"{card.message}\" successfully deleted"}, 200))
