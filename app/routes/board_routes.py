@@ -143,3 +143,32 @@ def delete_card(board_id, card_id):
     db.session.commit()
 
     return make_response(jsonify({"details": f"Card {card_id} \"{card.message}\" successfully deleted"}, 200))
+
+
+@boards_bp.route("/<board_id>/cards/<card_id>", methods=["PATCH"])
+def update_increment_likes_in_card(board_id, card_id):
+    card = validate_model(Card, card_id)
+
+    if card is None:
+        return make_response(jsonify({"error": "Card not found"}), 400)
+    
+    card.likes_count += 1
+
+    db.session.commit()
+
+    return make_response(jsonify({"card": card.to_dict()}), 200)
+
+
+
+@boards_bp.route("/<board_id>/cards/<card_id>", methods=["PUT"])
+def update_decrement_likes_in_card(board_id, card_id):
+    card = validate_model(Card, card_id)
+
+    if card is None:
+        return make_response(jsonify({"error": "Card not found"}), 400)
+    
+    card.likes_count -= 1
+
+    db.session.commit()
+
+    return make_response(jsonify({"card": card.to_dict()}), 200)
