@@ -110,3 +110,18 @@ def get_card_under_board(board_id):
     card_list = [card.to_dict() for card in cards]
 
     return make_response({"board_id": board.board_id, "cards": card_list}, 200)
+
+
+@boards_bp.route("/<board_id>/cards", methods=["DELETE"])
+def delete_all_cards_from_board(board_id):
+    board = validate_model(Board, board_id)
+    cards = Card.query.filter_by(board_id=board.board_id).all()
+
+    if not cards:
+        return make_response("No cards found", 404)
+    else:
+        for card in cards:
+            db.session.delete(card)
+        db.session.commit()
+
+        return make_response(f"All cards from board {board_id} have been deleted", 200)
