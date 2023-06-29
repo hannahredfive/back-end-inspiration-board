@@ -82,7 +82,7 @@ def post_cards_under_board(board_id):
     request_body = request.get_json()
     card_details = request_body["message"]
 
-    text_str = "Someone just created a card in " + board.board_id 
+    text_str = (f"Someone just created a card in {board.board_id}")
 
     card = Card(board_id=board.board_id, likes_count=0, message=card_details)
 
@@ -94,7 +94,7 @@ def post_cards_under_board(board_id):
         }
     # header_key = os.environ.get("authorization")
 
-    response = requests.post(url=url, json=payload)
+    response = requests.post(url, data=payload)
     return_response = response.status_code
 
 
@@ -147,7 +147,7 @@ def delete_card(board_id, card_id):
 
 
 @boards_bp.route("/<board_id>/cards/<card_id>", methods=["PATCH"])
-def update_increment_likes_in_card(board_id, card_id):
+def update_increment_likes_in_card(card_id):
     card = validate_model(Card, card_id)
 
     if card is None:
@@ -162,7 +162,7 @@ def update_increment_likes_in_card(board_id, card_id):
 
 
 @boards_bp.route("/<board_id>/cards/<card_id>", methods=["PUT"])
-def update_decrement_likes_in_card(board_id, card_id):
+def update_decrement_likes_in_card(card_id):
     card = validate_model(Card, card_id)
 
     if card is None:
