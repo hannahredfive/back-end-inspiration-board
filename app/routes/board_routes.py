@@ -147,7 +147,7 @@ def delete_card(board_id, card_id):
 
 
 @boards_bp.route("/<board_id>/cards/<card_id>", methods=["PATCH"])
-def update_increment_likes_in_card(card_id):
+def update_increment_likes_in_card(board_id,card_id):
     card = validate_model(Card, card_id)
 
     if card is None:
