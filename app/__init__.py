@@ -12,6 +12,7 @@ load_dotenv()
 
 def create_app():
     app = Flask(__name__)
+    CORS(app,resources={r'/*': {"origins": "*"}}, headers='Content-Type')
 
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 

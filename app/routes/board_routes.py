@@ -73,7 +73,7 @@ def delete_board(board_id):
     db.session.delete(board)
     db.session.commit()
 
-    return abort(make_response({"details":f"Board {board_id} \"{board.title}\" successfully deleted"}, 200))
+    return abort(make_response({"details":f"Board {board.board_id} \"{board.title}\" successfully deleted"}, 200))
 
 
 @boards_bp.route("/<board_id>/cards", methods=["POST"])
